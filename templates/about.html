@@ -1,0 +1,41 @@
+<!doctype html>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+
+<nav class="navbar sticky-top navbar-custom">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-extrac" href="/"><img src="{{url_for('static', filename='logo_white.png')}}"></a>
+		</div>
+
+	<ul class="nav navbar-nav" style="font-weight: 500">
+        <li><a href="/about">About <span class="sr-only">(current)</span></a></li>
+        <li><a href="/generator">Generator <span class="sr-only"></span></a></li>
+	    </ul>
+	</div>
+</nav>
+<body>
+	<div class="row" style="padding-top:2%;">
+		<div class="col-sm-3" style="color: #0E497B;">
+			<h2 style="padding-bottom: 2%; text-align: right;">Goal</h2>
+		</div>
+		<div class="col-sm-6" style="padding-top: 4%; padding-right:6%; color: gray;">
+			<h5 style="padding-bottom: 2%; text-align: left;">This web application will use a combination of various industry statistics in order to optimize air travel within Europe. Goals of this project come from both an economic and environmental standpoint. By optimizing flight paths given a set of parameters from the users, this application will be able to find the most efficient way to travel in terms of aircrafts used, layovers, etc. Efficiency inherently lowers overall cost for an airline and even ticket price for travelers. Fuel usage is also linked with environmental impact of an airline, since increased efficiency minimizes unnecessary fuel consumption. Our combined goal is to bring these cost saving efficiencies to the foreground of aviation, and make their use as accessible as possible to the both new and old airlines interested in increased optimization.</h5>
+		</div>
+	</div>
+	<div class="row" style="padding-top:2%;">
+		<div class="col-sm-3" style="color: #0E497B;">
+			<h2 style="padding-bottom: 2%; text-align: right;">Users</h2>
+		</div>
+		<div class="col-sm-6" style="padding-top: 4%; padding-right:6%; color: gray;">
+			<h5 style="padding-bottom: 2%; text-align: left;">The landing page of the website presents the user with two options: "Try" and "About." Respectively identical options are available in the header as "Generator" and "About." Upon selecting the about option, details about the applications design, and motivations are accessible. If the user clicks the try or generator options, they are brought to a new page, "Airfleet Generator." This page has two drop down menus, allowing the user to pick desired departure and arrival airports for their flight. Once an airport is picked in one, it is no longer an option in the other. Chosen routes are assumed to be symmetric, that is to say that if a user wants to fly one direction, they will inevitably need to make a return trip to the start location. Next, the user chooses the number of passengers they expect to fly over the selected route. The "Show Result" button is non-active until every metric has been filled with valid responses. After selecting "Show Result," a table is displayed showing details on an optimized flight plan and a total cost of the given route.</h5>
+		</div>
+	</div>
+</body>
+<nav class="navbar navbar-custom navbar-fixed-bottom">
+	<div class="container-fluid">
+		<h5 style="color: white; padding-left: 10px">Vrije Universiteit KAD Final Project</h5>
+	</div>
+</nav>

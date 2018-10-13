@@ -1,0 +1,33 @@
+
+.btn:hover {
+		background-color: #0E497B !important;
+		color: white !important;
+	}
+#main {
+ padding-top: 200px;
+ align-items: center;
+}
+.navbar-extrac img {
+	height: 50px;
+}
+.navbar-custom {
+	 background-color: #0E497B
+ 	!important; }
+
+body, html {
+    height: 100%;
+    font-family: 
+}
+
+.bg { 
+    /* The image used */
+    background-image: url("/static/plane_bgrnd.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

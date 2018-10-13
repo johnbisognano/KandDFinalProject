@@ -1,0 +1,91 @@
+<!doctype html>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/style.css') }}">
+
+<nav class="navbar sticky-top navbar-custom">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-extrac" href="/"><img src="{{url_for('static', filename='logo_white.png')}}"></a>
+		</div>
+
+	<ul class="nav navbar-nav" style="font-weight: 500">
+        <li><a href="/about">About <span class="sr-only">(current)</span></a></li>
+        <li><a href="/generator">Generator <span class="sr-only"></span></a></li>
+	    </ul>
+	</div>
+</nav>
+<body>
+	<div class="row" id="titlelogo" style="padding-left: 10%; padding-right: 5%; padding-top: 2%">
+		<h1 style="color: #0E497B; float: left; font-size: 56px;">Airfleet Generator</h1>
+		<img src="{{url_for('static', filename='logo_color.png')}}" style="height: 150px; float: right; padding-top: 2%;">
+	</div>
+	<div class="row">
+		<div class="col-sm-6" style="padding-left: 10%; padding-right: 5%; padding-top: 2%; color: #0E497B;" id="inputs">
+			<h5 style="padding-bottom: 2%;">Select a departure and an arrival airport from the dropdowns.</h5>
+		</div>
+		<div class="col-sm-6" style="padding-left: 10%; padding-right: 5%; padding-top: 2%; color: #0E497B;">
+			<h5 style="padding-bottom: 2%;">Input number of passengers expected per day.</h5>
+		</div>
+	</div>
+	<form method="POST">
+		<div class="row" style="padding-left: 10%; padding-right: 5%; padding-top: 2%; color: #0E497B;">
+			<div class="dropdown col-sm-3">
+				<label for="dept">Departure Airport: </label>
+				<select name=dept method="GET" action="/generator" class="btn dropdown-toggle" style="border-color: #0E497B; background-color: rgba(14,73,123, .2); color:#0E497B;">
+				    {% for param in params %}
+				    <option value= "{{param}}" SELECTED>{{param}}</option>"
+				    {% endfor %}
+				</select>
+			</div>
+			<div class="dropdown col-sm-4">
+				<label for="arr">Arrival Airport: </label>
+				<select name=arr method="GET" action="/generator" class="btn dropdown-toggle" style="border-color: #0E497B; background-color: rgba(14,73,123, .2); color:#0E497B;" name="arr">
+				    {% for param in params %}
+				    <option value= "{{param}}" SELECTED>{{param}}</option>"
+				    {% endfor %}
+				</select>
+			</div>
+			<div class="input col-sm-4">
+				<label for="passengers">Passengers: </label>
+				<input type="number" name="passengers"/>
+			</div>
+		</div>
+		<div class="row" style="text-align:center; padding-top: 5%;">
+		<input type="submit" id="submit" class="align-right btn btn-lg" style="border-color: #0E497B; background-color: rgba(14,73,123, .2); color:#0E497B;" href="/generator" ></input>
+		</div>
+		<p style="color:red; text-align:center;" method="GET" action="/generator">{{error}}</p>
+	</form>
+	<div class="row" style="padding-left: 10%; padding-right: 5%; padding-top: 2%;">
+		<h1 style="color: #0E497B; float: left; font-size: 56px;">Results</h1>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th scope="col">Num Planes</th>
+					<th scope="col">Aircraft</th>
+					<th scope="col">Fuel Location</th>
+					<th scope="col">Price Per Passenger</th>
+				</tr>
+			</thead>
+			<tbody method="GET" action="/generator">
+				{% for row in results %}
+				<tr>
+					{% for data in row %}
+					<td>{{data}}</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="row" style="padding-left: 10%; padding-right: 5%;">
+		<h1 class="col-sm-6" style="color: #0E497B; float: left; font-size: 48px;">Total Cost Per Passenger:</h1>
+		<h1  class="col-sm-6" method="GET" action="/generator" style="color: #0E497B; float: right; font-size: 48px; padding-bottom: 10%;">€ {{total}}</h1> 
+	</div>
+</body>
+<nav class="navbar navbar-custom navbar-fixed-bottom">
+	<div class="container-fluid">
+		<h5 style="color: white; padding-left: 10px">Vrije Universiteit KAD Final Project</h5>
+	</div>
+</nav>
