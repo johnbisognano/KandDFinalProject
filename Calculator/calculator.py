@@ -10,11 +10,11 @@ def schipholTaxes(numberOfPassengers, noiseCategory, MTOW):
 
     if noiseCategory = 'Category MCC3':
         landingTakeOfCharge = (MTOW/1000) * 6.21
-    if noiseCategory = 'Category A':
+    elif noiseCategory = 'Category A':
         landingTakeOfCharge = (MTOW/1000) * 5.43
-    if noiseCategory = 'Category B':
+    elif noiseCategory = 'Category B':
         landingTakeOfCharge = (MTOW/1000) * 3.88
-    if noiseCategory = 'Category C':
+    elif noiseCategory = 'Category C':
         landingTakeOfCharge = (MTOW/1000) * 3.10
 
     if status = 'departing':
@@ -28,11 +28,11 @@ def charlesDesGaullesTaxes(numberOfPassengers, noiseCategory, MTOW):
     #assuming only daytime arrivals/departures
     if wingArea <= 90:
         landingFee = landingFee * 1.3
-    if wingArea >90 & <=200:
+    elif wingArea >90 & <=200:
         landingFee = landingFee * 1.2
-    if wingArea >200 & <=300:
+    elif wingArea >200 & <=300:
         landingFee = landingFee*1.150
-    if wingArea >300 & <=800:
+    elif wingArea >300 & <=800:
         landingFee = landingFee*1.00
     else:
         landingFee = landingFee*0.850
@@ -62,15 +62,15 @@ def munichTaxes(numberOfPassengers, noiseCategory, MTOW):
 
 def frankfurtTaxes(numberOfPassengers, noiseCategory, MTOW):
     landingFeeFrankfurt = 0
-    if MTOW <= 15:
+    if MTOW<=15:
         landingFeeFrankfurt = 226.36 +1.36*numberOfPassengers
-    if MTOW >15 & <= 35:
+    if MTOW>15 & MTOW<=35:
         landingFeeFrankfurt = 136.85 +1.36*numberOfPassengers
-    if MTOW >35 & <=66:
+    if MTOW>35 & MTOW<=66:
         landingFeeFrankfurt = 33.95 +1.36*numberOfPassengers
 
 
-    passengerChargeFrankfurt = numberOfPassengers * (18.16 + 1.24)
+def passengerChargeFrankfurt = numberOfPassengers * (18.16 + 1.24)
 
     #parking charges are skipped due to manual categorization reasons
 
@@ -102,45 +102,83 @@ def madridTaxes(numberOfPassengers, noiseCategory, MTOW):
         result = (landingFeeMarid/2)+(parkingFeeMadrid/2)
     return result
 
-def  romeTaxes(numberOfPassengers, noiseCategory, MTOW):
-    
 
-def pricePerFlight():
+
+
+
+
+
+def  romeTaxes(numberOfPassengers, noiseCategory, MTOW):
+    #assuming peak hour prices
+    if MTOW<=25:
+        landingTakeOffRome = 54.15 + MTOW*4.67
+    elif MTOW>25 & MTOW<=75 :
+        landingTakeOffRome = 54.15 + MTOW*4.99
+    elif MTOW>75 & MTOW<=150 :
+        landingTakeOffRome = 54.15 + MTOW*2.32
+    elif MTOW>150 & MTOW<=250:
+        landingTakeOffRome = 54.15 + MTOW*2.53
+    elif MTOW >250:
+        landingTakeOffRome = 54.15 + MTOW*1.58
+
+    #assuming only adults
+    passengerChargeRome = numberOfPassengers * (17.77 + 3.34 + 2.27)
+
+    if status = 'departing':
+        result = (landingTakeOffRome/2) + passengerChargeRome
+    else:
+        result = (landingTakeOffRome/2)
+    return result
+
+
+def heathrowTaxes(numberOfPassengers, noiseCategory, MTOW):
+    euroMultiplier = 1.13932259
+    passengerFeeHeathrow = numberOfPassengers * 24.13
+    if passengerFeeHeathrow<1378.08:
+        passengerFeeHeathrow = 1378.08
+
+
+
+
+
+def pricePerFlight(aircraftPrice, lifetime):
     pricePerHour = aircraftPrice/lifetime
     return pricePerHour
 
 def airportTaxes(numberOfPassengers, noiseCategory, MTOW):
     if airportName = 'Schiphol':
         schipholTaxes(numberOfPassengers, noiseCategory, MTOW)
-    if airportName = 'Charles de Gaulle':
+    elif airportName = 'Charles de Gaulle':
         charlesDesGaullesTaxes(numberOfPassengers, noiseCategory, MTOW)
-    if airportName = 'Munich':
+    elif airportName = 'Munich':
         munichTaxes(numberOfPassengers, noiseCategory, MTOW)
-    if airportName = 'Frankfurt':
+    elif airportName = 'Frankfurt':
         frankfurtTaxes(numberOfPassengers, noiseCategory, MTOW)
-    if airportName = 'Barcelona':
+    elif airportName = 'Barcelona':
         barcelonaTaxes(numberOfPassengers, noiseCategory, MTOW)
-    if airportName = 'Madrid':
+    elif airportName = 'Madrid':
         madridTaxes(numberOfPassengers, noiseCategory, MTOW)
-    if airportName = 'Rome':
+    elif airportName = 'Rome':
         romeTaxes(numberOfPassengers, noiseCategory, MTOW)
+    elif airportName = 'Heathrow':
+        heathrowTaxes(numberOfPassengers, noiseCategory, MTOW)
 
 
-def fuelCosts():
-    fuelCost = usage * distance * price per Liter #in case of KG's include fuel density too
+def fuelCosts(usage, distance, pricePerLiter):
+    fuelCost = usage * distance * pricePerLiter #in case of KG's include fuel density too
     return fuelCost
 
-def refuelLocation():
+def refuelLocation(priceCountryA, priceCountryB):
     if (priceCountryA < priceCountryB):
         return priceCountryA
     else:
         return priceCountryB
 
 def main():
-    pricePerFlight()
+    pricePerFlight(aircraftPrice, lifetime)
     airportTaxes()
-    fuelCosts()
-    refuelLocation()
+    fuelCosts(usage, distance, pricePerLiter)
+    refuelLocation(priceCountryA, princeCountryB)
 
 
 
