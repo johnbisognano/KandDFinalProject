@@ -1,3 +1,7 @@
+import pandas as pd
+from geopy.distance import geodesic
+from geopy.geocoders import Nominatim
+
 def schipholTaxes(numberOfPassengers, noiseCategory, MTOW):
     serviceChargePerPassenger = 11.77
     securityChargePerPassenger = 10.88
@@ -68,9 +72,7 @@ def frankfurtTaxes(numberOfPassengers, noiseCategory, MTOW):
         landingFeeFrankfurt = 136.85 +1.36*numberOfPassengers
     if MTOW>35 & MTOW<=66:
         landingFeeFrankfurt = 33.95 +1.36*numberOfPassengers
-
-
-def passengerChargeFrankfurt = numberOfPassengers * (18.16 + 1.24)
+    passengerChargeFrankfurt = numberOfPassengers * (18.16 + 1.24)
 
     #parking charges are skipped due to manual categorization reasons
 
@@ -102,13 +104,7 @@ def madridTaxes(numberOfPassengers, noiseCategory, MTOW):
         result = (landingFeeMarid/2)+(parkingFeeMadrid/2)
     return result
 
-
-
-
-
-
-
-def  romeTaxes(numberOfPassengers, noiseCategory, MTOW):
+def romeTaxes(numberOfPassengers, noiseCategory, MTOW):
     #assuming peak hour prices
     if MTOW<=25:
         landingTakeOffRome = 54.15 + MTOW*4.67
@@ -130,16 +126,11 @@ def  romeTaxes(numberOfPassengers, noiseCategory, MTOW):
         result = (landingTakeOffRome/2)
     return result
 
-
 def heathrowTaxes(numberOfPassengers, noiseCategory, MTOW):
     euroMultiplier = 1.13932259
     passengerFeeHeathrow = numberOfPassengers * 24.13
     if passengerFeeHeathrow<1378.08:
         passengerFeeHeathrow = 1378.08
-
-
-
-
 
 def pricePerFlight(aircraftPrice, lifetime):
     pricePerHour = aircraftPrice/lifetime
@@ -163,22 +154,49 @@ def airportTaxes(numberOfPassengers, noiseCategory, MTOW):
     elif airportName = 'Heathrow':
         heathrowTaxes(numberOfPassengers, noiseCategory, MTOW)
 
+def distance(input1, input2, airport):
+
+    geolocator = Nominatim(user_agent="calculator")
+    location1 = geolocator.geocode(input1)
+    location2 = geolocator.geocode(input2)
+    distanceTotal = geodesic((location1.latitude, location1.longitude), (location2.latitude, location2.longitude)).kilometers
+    return distanceTotal
+
+
+
+
 
 def fuelCosts(usage, distance, pricePerLiter):
     fuelCost = usage * distance * pricePerLiter #in case of KG's include fuel density too
     return fuelCost
 
-def refuelLocation(priceCountryA, priceCountryB):
-    if (priceCountryA < priceCountryB):
-        return priceCountryA
+def refuelLocation(airport1, airport2, df):
+    priceCountryA = df.loc[df['AIRPORT'] == airport1]['PRICE INCL VAT']
+    priceCountryB = df.loc[df['AIRPORT'] == airport2]['PRICE INCL VAT']
+
+    if (priceCountryA.iloc[0] < priceCountryB.iloc[0]):
+        return priceCountryA.iloc[0]
     else:
-        return priceCountryB
+        return priceCountryB.iloc[0]
 
 def main():
-    pricePerFlight(aircraftPrice, lifetime)
-    airportTaxes()
-    fuelCosts(usage, distance, pricePerLiter)
-    refuelLocation(priceCountryA, princeCountryB)
+    aircraft = pd.read_csv('test.csv', delimiter=',', skipinitialspace=True)
+    airport = pd.read_csv('airporttest.csv', delimiter=',', skipinitialspace=True)
+    fuelCSV = pd.read_csv('19-10-2018_prix_europe.csv', delimiter=',', skipinitialspace=True)
+
+    input1 = 'Schiphol'
+    input2 = 'Frankfurt Airport'
+
+    mergedDF = pd.merge(fuelCSV, airport, how='left', on=['COUNTRY'])
+
+    aircraft['PRICEPERFLIGHT']=pricePerFlight(aircraft['PRICE'], aircraft['LIFETIME'])
+    aircraft['FUELCOSTS'] = fuelCosts(aircraft['USAGE'], distance(input1, input2, airport), refuelLocation(input1, input2, mergedDF))
+
+    print(aircraft)
+
+    # airportTaxes()
+
+    # refuelLocation(priceCountryA, princeCountryB)
 
 
 

@@ -1,0 +1,34 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix ex: <http://example.com/FinalProject/>.
+@prefix dbo: http://dbpedia.org/ontology>.
+
+ex:Croatia dbo:price "1.41647"^^xsd:decimal ;
+ex:Germany dbo:price "1.368"^^xsd:decimal ;
+ex:Austria dbo:price "1.319"^^xsd:decimal ;
+ex:Belgium dbo:price "1.5338"^^xsd:decimal ;
+ex:Bulgaria dbo:price "1.17855"^^xsd:decimal ;
+ex:Cyprus dbo:price "1.3833"^^xsd:decimal ;
+ex:Denmark dbo:price "1.48373"^^xsd:decimal ;
+ex:Spain dbo:price "1.28492"^^xsd:decimal ;
+ex:Estonia dbo:price "1.397"^^xsd:decimal ;
+ex:Finland dbo:price "1.466"^^xsd:decimal ;
+ex:France dbo:price "1.53308"^^xsd:decimal ;
+ex:Greece dbo:price "1.474"^^xsd:decimal ;
+ex:Hungary dbo:price "1.34135"^^xsd:decimal ;
+ex:Ireland dbo:price "1.419"^^xsd:decimal ;
+ex:Italy dbo:price "1.56552"^^xsd:decimal ;
+ex:Latvia dbo:price "1.26141"^^xsd:decimal ;
+ex:Lithuania dbo:price "1.25125"^^xsd:decimal ;
+ex:Luxembourg dbo:price "1.18401"^^xsd:decimal ;
+ex:Malta dbo:price "1.23"^^xsd:decimal ;
+ex:Netherlands dbo:price "1.424"^^xsd:decimal ;
+ex:Poland dbo:price "1.19571"^^xsd:decimal ;
+ex:Portugal dbo:price "1.435"^^xsd:decimal ;
+ex:CzechRep dbo:price "1.29281"^^xsd:decimal ;
+ex:Romania dbo:price "1.29474"^^xsd:decimal ;
+ex:UnitedKingdom dbo:price "1.5518"^^xsd:decimal ;
+ex:Slovakia dbo:price "1.329"^^xsd:decimal ;
+ex:Slovenia dbo:price "1.32675"^^xsd:decimal ;
+ex:Sweden dbo:price "1.59527"^^xsd:decimal ;
