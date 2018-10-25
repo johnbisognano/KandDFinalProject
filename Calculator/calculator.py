@@ -165,8 +165,8 @@ def fuelCosts(usage, distance, pricePerLiter):
 
 
 def refuelLocation(airport1, airport2, df):
-    priceCountryA = df.loc[df['AIRPORT'] == airport1]['PRICE INCL VAT']
-    priceCountryB = df.loc[df['AIRPORT'] == airport2]['PRICE INCL VAT']
+    priceCountryA = df.loc[df['AIRPORT'] == airport1]['FUELPRICE']
+    priceCountryB = df.loc[df['AIRPORT'] == airport2]['FUELPRICE']
 
     if (priceCountryA.iloc[0] < priceCountryB.iloc[0]):
         return priceCountryA.iloc[0]
@@ -196,11 +196,9 @@ def main():
     input2 = 'Roma Fiumicino'
     input3 = 2000
 
-    mergedDF = pd.merge(fuelCSV, airport, how='left', on=['COUNTRY'])
-
     aircraft['PRICEPERFLIGHT'] = pricePerFlight(aircraft['PRICE'], aircraft['LIFETIME'])
     aircraft['FUELCOSTS'] = fuelCosts(aircraft['USAGE'], distance(input1, input2),
-                                      refuelLocation(input1, input2, mergedDF))
+                                      refuelLocation(input1, input2, airport))
 
     aircraft['Airport 1 charge'] = np.nan
     aircraft['Airport 2 charge'] = np.nan
@@ -215,6 +213,7 @@ def main():
     aircraft['Total capacity'] = checkCapacity(distance(input1,input2), aircraft['SPEED'], input3, aircraft['CAPACITY'])
 
     trues = aircraft.loc[aircraft['Total capacity']] #returns all rows with True
+    print(fuelCSV['COUNTRY'], fuelCSV['PRICE INCL VAT'])
     print(trues.ix[trues['Total charge'].idxmin()]) #return cheapest option of all True rows
 
 if __name__ == '__main__':
