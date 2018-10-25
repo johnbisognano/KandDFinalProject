@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask import render_template
+import calculator as calc
 
 app = Flask(__name__)
 
@@ -41,3 +42,6 @@ def query(passengers, departure, arrival):
     results = [[180, 'A320', 'Madrid', 100], [180, 'A320', 'Madrid', 100], [180, 'A320', 'Madrid', 100],
                [180, 'A320', 'Madrid', 100], [180, 'A320', 'Madrid', 100], [180, 'A320', 'Madrid', 100]]
     return results
+#call to calculator function with dummy values
+opt = calc.optimize('x','y', 100)
+res = opt.main(opt.departure, opt.arrival, opt.passengers)
