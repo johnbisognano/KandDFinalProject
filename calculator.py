@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import math
 from geopy.distance import geodesic
 from geopy.geocoders import Nominatim
 
@@ -9,7 +10,7 @@ class optimize:
         self.arrival = arrival
         self.passengers = passengers
 
-    def schipholTaxes(numberOfPassengers, MTOW):
+    def schipholTaxes(self, numberOfPassengers, MTOW, noiseCategory):
         schipholMTOW = MTOW.copy()
 
         serviceChargePerPassenger = 11.77
@@ -22,43 +23,22 @@ class optimize:
 
             # we assume only connected stands
             # we only count prices for daytime arrivals/departures
-
-        if noiseCategory == 'Category MCC3':
-            landingTakeOfCharge = (schipholMTOW) * 6.21
-        elif noiseCategory == 'Category A':
-            landingTakeOfCharge = (schipholMTOW) * 5.43
-        elif noiseCategory == 'Category B':
-            landingTakeOfCharge = (schipholMTOW) * 3.88
-        elif noiseCategory == 'Category C':
-            landingTakeOfCharge = (schipholMTOW) * 3.10
+            
+            if noiseCategory.iloc[i] == 'CatMCC3':
+                landingTakeOfCharge = (schipholMTOW) * 6.21
+            elif noiseCategory.iloc[i] == 'CatA':
+                landingTakeOfCharge = (schipholMTOW) * 5.43
+            elif noiseCategory.iloc[i] == 'CatB':
+                landingTakeOfCharge = (schipholMTOW) * 3.88
+            elif noiseCategory.iloc[i] == 'CatC':
+                landingTakeOfCharge = (schipholMTOW) * 3.10
 
         result = (passengerCharges / 2) + (landingTakeOfCharge / 2)
-
+        print("PRINT HERE")
         return result
 
 
-    # def charlesDesGaullesTaxes(numberOfPassengers, noiseCategory, MTOW):
-    #     landingFee = 286.03 + 3.993 * MTOW
-    #     #assuming only daytime arrivals/departures
-    #     if wingArea <= 90:
-    #         landingFee = landingFee * 1.3
-    #     elif wingArea >90 & wingArea<=200:
-    #         landingFee = landingFee * 1.2
-    #     elif wingArea >200 & wingArea<=300:
-    #         landingFee = landingFee*1.150
-    #     elif wingArea >300 & wingArea<=800:
-    #         landingFee = landingFee*1.00
-    #     else:
-    #         landingFee = landingFee*0.850
-    #
-    #     parkingFee = 3.704 * MTOW
-    #     passengerFee = 9.05 * numberOfPassengers
-    #
-    #     result = (landingFee / 2) + (parkingFee / 2) + (passengerFee / 2)
-    #     return result
-
-
-    def munichTaxes(numberOfPassengers, MTOW):
+    def munichTaxes(self, numberOfPassengers, MTOW):
         # average between bonus and non-bonus planes
         # assuming only daytime takeoffs and landings
         landingFeeMunich = (2.72 + 4.36) / (2 * MTOW)
@@ -69,7 +49,7 @@ class optimize:
         return result
 
 
-    def frankfurtTaxes(numberOfPassengers, MTOW):
+    def frankfurtTaxes(self, numberOfPassengers, MTOW):
         landingFeeFrankfurt=[]
         for i in range(0, len(MTOW.index)):
             if MTOW.iloc[i] <= 15:
@@ -90,7 +70,7 @@ class optimize:
         return df
 
 
-    def barcelonaTaxes(numberOfPassengers, MTOW):
+    def barcelonaTaxes(self, numberOfPassengers, MTOW):
         landingFeeBarcelona = (7.112002 + 3.313090) * MTOW
         passengerFeeBarcelona = 13.7 * numberOfPassengers
         parkingFeeBarcelona = 4 * MTOW * (0.124357 + 26.853551)
@@ -99,7 +79,7 @@ class optimize:
         return result
 
 
-    def madridTaxes(numberOfPassengers, MTOW):
+    def madridTaxes(self, numberOfPassengers, MTOW):
         landingFeeMarid = (8.072800 + 3.333669) * MTOW
         passengerFeeMadrid = 14.73 * numberOfPassengers
         parkingFeeMadrid = 4 * MTOW * (0.130366 + 29.618851)
@@ -108,7 +88,7 @@ class optimize:
         return result
 
 
-    def romeTaxes(numberOfPassengers,  MTOW):
+    def romeTaxes(self, numberOfPassengers,  MTOW):
         # assuming peak hour prices
         landingTakeOffRome = []
         for i in range (0,len(MTOW.index)):
@@ -134,28 +114,27 @@ class optimize:
         df = pd.Series(result, name='something') #again make sure it returns a pandas dataframe
         return df
 
-    def pricePerFlight(aircraftPrice, lifetime):
+    def pricePerFlight(self, aircraftPrice, lifetime):
         pricePerHour = aircraftPrice / lifetime
         return pricePerHour
 
-    def airportTaxes(numberOfPassengers, MTOW, airportName):
-        if airportName == 'Schiphol':
-            return (schipholTaxes(numberOfPassengers, MTOW))
-        elif airportName == 'Charles de Gaulle':
-            charlesDesGaullesTaxes(numberOfPassengers, MTOW)
+    def airportTaxes(self, numberOfPassengers, MTOW, airportName, noisecat):
+        numberOfPassengers = float(numberOfPassengers)
+        if airportName == 'Amsterdam Airport Schiphol':
+            return (self.schipholTaxes(numberOfPassengers, MTOW, noisecat))
         elif airportName == 'Munich Airport':
-            return munichTaxes(numberOfPassengers, MTOW)
+            return self.munichTaxes(numberOfPassengers, MTOW)
         elif airportName == 'Frankfurt Airport':
-            return frankfurtTaxes(numberOfPassengers, MTOW)
-        elif airportName == 'Barcelona Airport':
-            return barcelonaTaxes(numberOfPassengers, MTOW)
-        elif airportName == 'Madrid Airport':
-            return madridTaxes(numberOfPassengers, MTOW)
+            return self.frankfurtTaxes(numberOfPassengers, MTOW)
+        elif airportName == 'Barcelona-El Prat Airport':
+            return self.barcelonaTaxes(numberOfPassengers, MTOW)
+        elif airportName == 'Adolfo Suárez Madrid-Barajas Airport':
+            return self.madridTaxes(numberOfPassengers, MTOW)
         elif airportName == 'Roma Fiumicino':
-            return romeTaxes(numberOfPassengers, MTOW)
+            return self.romeTaxes(numberOfPassengers, MTOW)
 
 
-    def distance(input1, input2):
+    def distance(self, input1, input2):
         geolocator = Nominatim(user_agent="calculator") #geolocator can find coordinates automatically based on string input
         location1 = geolocator.geocode(input1)
         location2 = geolocator.geocode(input2)
@@ -164,26 +143,27 @@ class optimize:
         return distanceTotal
 
 
-    def fuelCosts(usage, distance, pricePerLiter):
+    def fuelCosts(self, usage, distance, pricePerLiter):
         fuelCost = usage * distance * pricePerLiter  # in case of KG's include fuel density too
         return fuelCost
 
 
-    def refuelLocation(airport1, airport2, df):
+    def refuelLocation(self, airport1, airport2, df):
+
         priceCountryA = df.loc[df['AIRPORT'] == airport1]['FUELPRICE']
         priceCountryB = df.loc[df['AIRPORT'] == airport2]['FUELPRICE']
-
+    
         if (priceCountryA.iloc[0] < priceCountryB.iloc[0]):
-            return priceCountryA.iloc[0]
+            return [priceCountryA.iloc[0],airport1]
         else:
-            return priceCountryB.iloc[0]
+            return [priceCountryB.iloc[0], airport2]
 
-    def checkCapacity(distance, speed, passengers, capacity):
+    def checkCapacity(self, distance, speed, passengers, capacity):
         dfList = []
         totalFlights = np.floor(24 / ((distance / speed)+1)) - np.floor(24 / ((distance / speed)+1))%2 #floors all number of flights and makes sure the number of flights is even i.e. always a return flight
         totalCapacity = (capacity * totalFlights)
         for i in range(0,len(capacity.index)):
-            if totalCapacity.iloc[i] - passengers >= 0:
+            if totalCapacity.iloc[i] - float(passengers) >= 0:
                 dfList.append(True)
             else:
                 dfList.append(False)
@@ -192,36 +172,38 @@ class optimize:
 
 
     def main(self, departure, arrival, passengers):
-        aircraft = pd.read_csv('test.csv', delimiter=',', skipinitialspace=True)
-        airport = pd.read_csv('airporttest.csv', delimiter=',', skipinitialspace=True)
-        fuelCSV = pd.read_csv('19-10-2018_prix_europe.csv', delimiter=',', skipinitialspace=True)
+        aircraft = pd.read_csv('aircraft.csv', delimiter=',', skipinitialspace=True)
+        airport = pd.read_csv('airports.csv', delimiter=',', skipinitialspace=True)
 
         #inputs from html
-        input1 = 'Madrid Airport'
-        input2 = 'Roma Fiumicino'
-        input3 = 2000
         #actual inputs work, commented currently
-        #input1 = departure
-        #input2 = arrival
-        #input3 = passengers
+        input1 = departure
+        input2 = arrival
+        input3 = passengers
 
-        aircraft['PRICEPERFLIGHT'] = pricePerFlight(aircraft['PRICE'], aircraft['LIFETIME'])
-        aircraft['FUELCOSTS'] = fuelCosts(aircraft['USAGE'], distance(input1, input2),
-                                          refuelLocation(input1, input2, airport))
+        aircraft['PRICEPERFLIGHT'] = self.pricePerFlight(aircraft['PRICE'], aircraft['LIFETIME'])
+        aircraft['FUELCOSTS'] = self.fuelCosts(aircraft['USAGE'], self.distance(input1, input2),
+                                          self.refuelLocation(input1, input2, airport)[0])
 
         aircraft['Airport 1 charge'] = np.nan
         aircraft['Airport 2 charge'] = np.nan
 
-        aircraft['Airport 1 charge'] = airportTaxes(input3, aircraft['MTOW'], input1)
-        aircraft['Airport 2 charge'] = airportTaxes(input3, aircraft['MTOW'], input2)
+        aircraft['Airport 1 charge'] = self.airportTaxes(input3, aircraft['MTOW'], input1, aircraft['NOSIECAT'])
+        aircraft['Airport 2 charge'] = self.airportTaxes(input3, aircraft['MTOW'], input2, aircraft['NOSIECAT'])
 
         #compute total charge per plane
         aircraft['Total charge'] = aircraft.sum(axis=1)
-
+        aircraft['refuel airport'] =  self.refuelLocation(input1, input2, airport)[1]
         #add boolean column whether desired amount of passengers per day is possible
-        aircraft['Total capacity'] = checkCapacity(distance(input1,input2), aircraft['SPEED'], input3, aircraft['CAPACITY'])
+        aircraft['Total capacity'] = self.checkCapacity(self.distance(input1,input2), aircraft['SPEED'], input3, aircraft['CAPACITY'])
 
         trues = aircraft.loc[aircraft['Total capacity']] #returns all rows with True
-        print(fuelCSV['COUNTRY'], fuelCSV['PRICE INCL VAT'])
-        print(trues.ix[trues['Total charge'].idxmin()]) #return cheapest option of all True rows
+        optimized_list = [[]]
+        res = trues.ix[trues['Total charge'].idxmin()] #return cheapest option of all True rows
+        optimized_list[0].append(math.ceil(float(passengers) / res['CAPACITY']))
+        optimized_list[0].append(res['TYPE'])
+        optimized_list[0].append(res['refuel airport'])
+        optimized_list[0].append(round(((res['PRICEPERFLIGHT'] / res['CAPACITY'])*1000000), 2))
+        return [optimized_list, round(res['Total charge'], 2)]
+        
     

@@ -65,7 +65,7 @@
 					<th scope="col">Num Planes</th>
 					<th scope="col">Aircraft</th>
 					<th scope="col">Fuel Location</th>
-					<th scope="col">Price Per Passenger</th>
+					<th scope="col">Price Per Passenger (€)</th>
 				</tr>
 			</thead>
 			<tbody method="GET" action="/generator">
@@ -80,7 +80,7 @@
 		</table>
 	</div>
 	<div class="row" style="padding-left: 10%; padding-right: 5%;">
-		<h1 class="col-sm-6" style="color: #0E497B; float: left; font-size: 48px;">Total Cost Per Passenger:</h1>
+		<h1 class="col-sm-6" style="color: #0E497B; float: left; font-size: 48px;">Route operation costs: </h1>
 		<h1  class="col-sm-6" method="GET" action="/generator" style="color: #0E497B; float: right; font-size: 48px; padding-bottom: 10%;">€ {{total}}</h1> 
 	</div>
 </body>
